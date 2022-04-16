@@ -9,6 +9,9 @@ public class CubeController : MonoBehaviour
     //消滅位置
     private float deadLine = -10;
 
+    //プレイヤーに触れた
+    //private bool isPlayer = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +21,12 @@ public class CubeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //キューブを移動させる
-        transform.Translate(this.speed * Time.deltaTime, 0, 0);
+        //プレイヤーに触れるまでキューブを移動させる
+        //if (isPlayer == false)
+        //{
+            //キューブを移動させる
+            transform.Translate(this.speed * Time.deltaTime, 0, 0);
+        //}
 
         //画面外に出たら破棄する
         if(transform.position.x<this.deadLine)
@@ -33,6 +40,13 @@ public class CubeController : MonoBehaviour
     //void OnTriggerEnter2D(Collider2D other)を使うとキューブが地面をすり抜ける
     void OnCollisionEnter2D(Collision2D other)
     {
+        /*
+        //プレイヤーに触れた場合
+        if(other.gameObject.tag=="Player")
+        {
+            isPlayer = true;
+        }
+        */
         //地面にキューブが接触した場合
         if(other.gameObject.tag=="GroundTag")
         {
@@ -45,7 +59,8 @@ public class CubeController : MonoBehaviour
         {
             //音を出す
             GetComponent<AudioSource>().Play();
-            Debug.Log("debug comment" + other.gameObject.tag);
+            //Debug.Log("debug comment" + other.gameObject.tag);
         }
     }
+
 }

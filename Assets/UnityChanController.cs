@@ -17,6 +17,13 @@ public class UnityChanController : MonoBehaviour
     //ゲームオーバーになる位置
     private float deadLine = -9;
 
+    //マウスの位置
+    private Vector2 mouse;
+    //Unityちゃんの位置
+    private Vector2 unitychan;
+    //Cubeとの接触判定
+    private bool isCube = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +45,17 @@ public class UnityChanController : MonoBehaviour
 
         //ジャンプ状態の時にはボリュームを0にする
         GetComponent<AudioSource>().volume = (isGround) ? 1 : 0;
+
+
+        //ユニティちゃんがマウスカーソルについて行く
+        if (isCube == false)
+        {
+            mouse = Input.mousePosition;
+            unitychan = Camera.main.ScreenToWorldPoint(new Vector2(mouse.x, mouse.y));
+            unitychan.y = transform.position.y;
+            this.transform.position = unitychan;
+        }
+       
 
         //着地状態でクリックされた場合
         if (Input.GetMouseButtonDown(0)&&isGround)
@@ -63,6 +81,35 @@ public class UnityChanController : MonoBehaviour
 
             //ユニティちゃんを破棄する
             Destroy(gameObject);
+        }
+    }
+ 
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        
+        //プレイヤーに触れた場合
+        if(other.gameObject.tag=="CubeTag")
+        {
+            isCube = true;
+        }
+    }
+    void OnCollisionStay2D(Collision2D other)
+    {
+
+        //プレイヤーに触れ続けてる場合
+        if (other.gameObject.tag == "CubeTag")
+        {
+            isCube = true;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D other)
+    {
+
+        //プレイヤーから離れた場合
+        if (other.gameObject.tag == "CubeTag")
+        {
+            isCube = false;
         }
     }
 }
